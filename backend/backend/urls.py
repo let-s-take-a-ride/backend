@@ -23,12 +23,20 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
 
-    #Project Urls
+    # Project Urls
+    path('user/', include('user.urls')),
 
-    #Management
+    # Management
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('health_check/', include('health_check.urls')),
 ]
 
 from django.conf import settings
 print(f"Time zone: {settings.TIME_ZONE}")
+print(f"Time zone: {settings.AUTH0_DOMAIN}")
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        path('__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns
