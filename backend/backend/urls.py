@@ -25,6 +25,8 @@ urlpatterns = [
 
     # Project Urls
     path('user/', include('user.urls')),
+    path('auth/', include('auth0authorization.urls')),
+
 
     # Management
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
@@ -33,7 +35,7 @@ urlpatterns = [
 
 from django.conf import settings
 print(f"Time zone: {settings.TIME_ZONE}")
-print(f"Time zone: {settings.AUTH0_DOMAIN}")
+# print(f"Time zone: {settings.AUTH0_DOMAIN}")
 
 if settings.DEBUG:
     import debug_toolbar

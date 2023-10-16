@@ -1,7 +1,7 @@
 import jwt
 import requests
 from django.http import JsonResponse
-
+import json
 from django.conf import settings
 
 AUTH0_DOMAIN = settings.AUTH0_DOMAIN
@@ -17,43 +17,33 @@ class Auth0TokenMiddleware:
         if header is None:
             return JsonResponse({'error': 'Authorization header missing'}, status=401)
 
-        token = header.split()[1]
-        resp = requests.get(f'https://{settings.AUTH0_DOMAIN}/.well-known/jwks.json')
-        jwks = resp.json()
-        unverified_header = jwt.get_unverified_header(token)
-        rsa_key = {}
-        for key in jwks['keys']:
-            # print(key)
-            if key['kid'] == unverified_header['kid']:
-                rsa_key = {
-                    'kty': key['kty'],
-                    'kid': key['kid'],
-                    'use': key['use'],
-                    'n': key['n'],
-                    'e': key['e']
-                }
-        if rsa_key:
-            try:
-                payload = jwt.decode(
-                    token,
-                    rsa_key,
-                    algorithms=settings.AUTH0_ALGORITHMS,
-                    audience=settings.AUTH0_API_AUDIENCE,
-                    issuer=f'https://{settings.AUTH0_DOMAIN}/'
-                )
-                return payload, True
+        token = header.split()[1]  # Assuming header is in the format "Bearer <token>"
+        jwks_url = f'https://{settings.AUTH0_DOMAIN}/.well-known/jwks.json'
+        jwks = requests.get(jwks_url).json()
 
-            except Exception as e:
-                JsonResponse(data={"message": "unauthorized"}, status=401)
+        public_key = None
+        header_kid = jwt.get_unverified_header(token).get('kid')
+        for jwk in jwks['keys']:
+            if jwk['kid'] == header_kid:
+                public_key = jwt.algorithms.RSAAlgorithm.from_jwk(json.dumps(jwk))
+                break
 
-        print("everything ok!")
+        if public_key is None:
+            return JsonResponse({'error': 'Public key not found'}, status=401)
 
-        headers = {
-            'Authorization': f'Bearer {token}',
-        }
-        url = f'https://{settings.AUTH0_DOMAIN}/userinfo'
-        response = requests.get(url, headers=headers)
-        user_info = response.json()
-        # return user_info
-        return JsonResponse(
-            data={'nickname': user_info.get('nickname', 'N/A'), 'picture': user_info.get('picture', 'N/A')}, status=200)
+        try:
+            payload = jwt.decode(
+                token,
+                public_key,
+                audience=settings.AUTH0_AUDIENCE,
+                issuer=f'https://{settings.AUTH0_DOMAIN}/',
+                algorithms=['RS256']
+            )
+            print(payload)
+        except jwt.InvalidTokenError as e:
+            return JsonResponse({'error': str(e)}, status=401)
+
+        request.token_payload = payload
+
+        response = self.get_response(request)
+        return response

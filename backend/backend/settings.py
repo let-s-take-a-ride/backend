@@ -27,6 +27,7 @@ class Dev(Configuration):
     AUTH0_AUDIENCE = os.getenv('DJANGO_AUTH0_AUDIENCE')
     AUTH0_ALGORITHMS = ['RS256']
 
+
     ALLOWED_HOSTS = ['*']
     CORS_ORIGIN_ALLOW_ALL = True
     CORS_ALLOW_ALL_ORIGINS = True
@@ -83,11 +84,14 @@ class Dev(Configuration):
         'health_check.contrib.psutil'
     ]
 
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
     MIDDLEWARE = [
         'debug_toolbar.middleware.DebugToolbarMiddleware',
         'corsheaders.middleware.CorsMiddleware',
 
-        'core.auth_middleware.Auth0TokenMiddleware',
+        # 'core.auth_middleware.Auth0TokenMiddleware',
 
         'django.middleware.security.SecurityMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
@@ -104,9 +108,12 @@ class Dev(Configuration):
             'rest_framework.permissions.IsAuthenticated',
         ),
         'DEFAULT_AUTHENTICATION_CLASSES': (
-            'auth0authorization.authentication.Auth0TokenAuthentication'
+            'auth0authorization.authentication.Auth0TokenAuthentication',
+            'django.contrib.auth.backends.ModelBackend',
         )
     }
+
+    AUTH_USER_MODEL = 'user.CustomUser'
 
     ROOT_URLCONF = 'backend.urls'
 
