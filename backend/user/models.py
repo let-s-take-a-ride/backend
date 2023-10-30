@@ -23,10 +23,11 @@ class CustomUserManager(BaseUserManager):
 
         return self.create_user(email, nickname, password, **extra_fields)
 
+
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     nickname = models.CharField(max_length=30)
-    picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
+    picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True, max_length=255)
     first_login = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
     is_active = models.BooleanField(default=True)
@@ -39,3 +40,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.nickname
+
+
+class UserPreferences(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='preferences')
+    distance = models.FloatField(null=True, blank=True)
+    average = models.FloatField(null=True, blank=True)
+    city = models.CharField(max_length=100, null=True, blank=True)

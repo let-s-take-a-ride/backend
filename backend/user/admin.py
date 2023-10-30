@@ -1,12 +1,20 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
-from .models import CustomUser
+from .models import CustomUser, UserPreferences
 
-user = get_user_model()
+User = get_user_model()
+
 
 class CustomUserAdmin(admin.ModelAdmin):
-    def __init__(self, model, admin_site):
-        self.list_display = [field.name for field in model._meta.fields]
-        super().__init__(model, admin_site)
+    list_display = [field.name for field in CustomUser._meta.fields]
+
 
 admin.site.register(CustomUser, CustomUserAdmin)
+
+
+class UserPreferencesAdmin(admin.ModelAdmin):
+    # Add any custom configurations for the UserPreferences model here
+    list_display = ('user', 'distance', 'average', 'city')
+
+# Register the UserPreferences model with the UserPreferencesAdmin class
+admin.site.register(UserPreferences, UserPreferencesAdmin)

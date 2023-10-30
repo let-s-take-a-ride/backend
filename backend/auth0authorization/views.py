@@ -12,13 +12,15 @@ class LoginView(APIView):
 
         decoded_url = urllib.parse.unquote(user.picture.url[7:]) if user.picture else None
         corrected_url = decoded_url.replace("https:/", "https://")
+        print(user.__dict__)
 
         if user.is_authenticated:
             data = {
                 'id': user.id,
                 'username': user.nickname,
                 'email': user.email,
-                'picture': corrected_url
+                'picture': corrected_url,
+                'is_first_login': user.first_login
             }
             return Response(data, status=status.HTTP_200_OK)
         else:

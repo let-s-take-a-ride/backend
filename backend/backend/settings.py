@@ -36,8 +36,9 @@ class Dev(Configuration):
     CSRF_TRUSTED_ORIGINS = [
         'http://localhost:3000',
         'http://localhost:5173',
-        'https://nine-keys-bake.loca.lt'
-        'https://solid-adults-lose.loca.lt'
+        'https://nine-keys-bake.loca.lt',
+        'https://solid-adults-lose.loca.lt',
+        'https://dark-singers-suffer.loca.lt/'
     ]
     SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
@@ -45,7 +46,8 @@ class Dev(Configuration):
         '127.0.0.1',
         '192.168.0.100',
         'localhost',
-        'https://nine-keys-bake.loca.lt'
+        'https://nine-keys-bake.loca.lt',
+        'https://dark-singers-suffer.loca.lt/'
     ]
 
     CORS_ALLOWED_ORIGINS = [
@@ -69,11 +71,13 @@ class Dev(Configuration):
         'drf_yasg',
         'rest_framework_jwt',
         'rest_framework_simplejwt',
+        'django_filters',
 
         # app modules
-        'core',
-        'user',
-        'auth0authorization',
+        'core.apps.CoreConfig',
+        'user.apps.UserConfig',
+        'auth0authorization.apps.Auth0AuthorizationConfig',
+        'workout.apps.WorkoutConfig',
 
         # health check
         'health_check',
@@ -105,6 +109,7 @@ class Dev(Configuration):
 
     REST_FRAMEWORK = {
         'DEFAULT_PERMISSION_CLASSES': (
+            # 'rest_framework.permissions.AllowAny',
             'rest_framework.permissions.IsAuthenticated',
         ),
         'DEFAULT_AUTHENTICATION_CLASSES': (

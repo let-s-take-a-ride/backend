@@ -92,8 +92,8 @@ class Auth0TokenAuthentication(BaseAuthentication):
         if not email:
             raise exceptions.AuthenticationFailed(self.err_msg)
 
-
         user = User.objects.filter(email=email).last()
+        print(nick, email, picture)
         if user is None:
             user = User.objects.create(email=email, nickname=nick, picture=picture)
             user.save()
