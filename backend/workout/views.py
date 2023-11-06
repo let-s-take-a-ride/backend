@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions, filters, serializers
+from rest_framework import viewsets, permissions, filters, serializers, status
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Event, EventMembership
 from .serializers import EventSerializer, EventMembershipSerializer
@@ -16,6 +16,12 @@ class EventViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     ordering_fields = ['name', 'date', 'average_speed', 'members_count', 'max_members']
     search_fields = ['name', 'owner__nickname', 'city']
+
+
+    def create(self, request, *args, **kwargs):
+        print(request.data)
+        # print(request.META)
+        return super().create(request, *args, **kwargs)
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -51,6 +57,24 @@ class EventViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(events, many=True)
         return Response(serializer.data)
 
+    @action(detail=True, methods=['post'])
+    def attend(self, request, *args, **kwargs):
+        event = self.get_object()
+        membership_exists = EventMembership.objects.filter(user=request.user, event=event).exists()
+        if not membership_exists:
+            EventMembership.objects.create(user=request.user, event=event)
+            return Response({'status': 'attended successfully'}, status=status.HTTP_200_OK)
+        return Response({'error': 'User already attending this event'}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=['post'])
+    def resign(self, request, *args, **kwargs):
+        event = self.get_object()
+        try:
+            membership = EventMembership.objects.get(user=request.user, event=event)
+            membership.delete()
+            return Response({'status': 'resigned successfully'}, status=status.HTTP_200_OK)
+        except EventMembership.DoesNotExist:
+            return Response({'error': 'User not attending this event'}, status=status.HTTP_400_BAD_REQUEST)
     def perform_create(self, serializer):
         serializer.save()
         # serializer.save(owner=self.request.user)

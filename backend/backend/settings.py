@@ -115,7 +115,11 @@ class Dev(Configuration):
         'DEFAULT_AUTHENTICATION_CLASSES': (
             'auth0authorization.authentication.Auth0TokenAuthentication',
             'django.contrib.auth.backends.ModelBackend',
-        )
+        ),
+        'DEFAULT_THROTTLE_RATES': {
+            'user': '1000/day',
+            'anon': '100/day',
+        },
     }
 
     AUTH_USER_MODEL = 'user.CustomUser'

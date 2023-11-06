@@ -36,6 +36,7 @@ class EventMembership(models.Model):
         unique_together = ('event', 'user')
 
     def __str__(self):
-        return f'{self.user.username} in {self.event.name}'
+        # return f'{self.user.username} in {self.event.name}'
+        return f'{self.user.nickname} in {self.event.name}'
 
 
