@@ -35,10 +35,12 @@ class Dev(Configuration):
 
     CSRF_TRUSTED_ORIGINS = [
         'http://localhost:3000',
+        "http://localhost:8000",
         'http://localhost:5173',
         'https://nine-keys-bake.loca.lt',
         'https://solid-adults-lose.loca.lt',
-        'https://dark-singers-suffer.loca.lt/'
+        'https://dark-singers-suffer.loca.lt/',
+        'https://2ba0-2a02-a319-a18f-7a00-00-4d96.ngrok-free.app'
     ]
     SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
@@ -47,14 +49,19 @@ class Dev(Configuration):
         '192.168.0.100',
         'localhost',
         'https://nine-keys-bake.loca.lt',
-        'https://dark-singers-suffer.loca.lt/'
+        'https://dark-singers-suffer.loca.lt',
+        'https://2ba0-2a02-a319-a18f-7a00-00-4d96.ngrok-free.app'
     ]
 
     CORS_ALLOWED_ORIGINS = [
-        'https://solid-adults-lose.loca.lt'
+        'https://solid-adults-lose.loca.lt',
+        "http://localhost:8000",
+        'https://2ba0-2a02-a319-a18f-7a00-00-4d96.ngrok-free.app'
+
     ]
 
     INSTALLED_APPS = [
+        'daphne',
         'django.contrib.admin',
         'django.contrib.auth',
         'django.contrib.contenttypes',
@@ -72,12 +79,15 @@ class Dev(Configuration):
         'rest_framework_jwt',
         'rest_framework_simplejwt',
         'django_filters',
+        'channels',
+
 
         # app modules
         'core.apps.CoreConfig',
         'user.apps.UserConfig',
         'auth0authorization.apps.Auth0AuthorizationConfig',
         'workout.apps.WorkoutConfig',
+        'notification.apps.NotificationConfig',
 
         # health check
         'health_check',
@@ -90,6 +100,16 @@ class Dev(Configuration):
 
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [("localhost", 6379)],
+            },
+        },
+    }
 
     MIDDLEWARE = [
         'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -109,11 +129,11 @@ class Dev(Configuration):
 
     REST_FRAMEWORK = {
         'DEFAULT_PERMISSION_CLASSES': (
-            # 'rest_framework.permissions.AllowAny',
-            'rest_framework.permissions.IsAuthenticated',
+            'rest_framework.permissions.AllowAny',
+            # 'rest_framework.permissions.IsAuthenticated',
         ),
         'DEFAULT_AUTHENTICATION_CLASSES': (
-            'auth0authorization.authentication.Auth0TokenAuthentication',
+            # 'auth0authorization.authentication.Auth0TokenAuthentication',
             'django.contrib.auth.backends.ModelBackend',
         ),
         'DEFAULT_THROTTLE_RATES': {
@@ -143,6 +163,8 @@ class Dev(Configuration):
     ]
 
     WSGI_APPLICATION = 'backend.wsgi.application'
+    ASGI_APPLICATION = 'backend.asgi.application'
+    # ASGI_APPLICATION = 'routing.application'
 
     DATABASES = {
         'default': dj_database_url.config(),
