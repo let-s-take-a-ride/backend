@@ -129,11 +129,11 @@ class Dev(Configuration):
 
     REST_FRAMEWORK = {
         'DEFAULT_PERMISSION_CLASSES': (
-            'rest_framework.permissions.AllowAny',
-            # 'rest_framework.permissions.IsAuthenticated',
+            # 'rest_framework.permissions.AllowAny',
+            'rest_framework.permissions.IsAuthenticated',
         ),
         'DEFAULT_AUTHENTICATION_CLASSES': (
-            # 'auth0authorization.authentication.Auth0TokenAuthentication',
+            'auth0authorization.authentication.Auth0TokenAuthentication',
             'django.contrib.auth.backends.ModelBackend',
         ),
         'DEFAULT_THROTTLE_RATES': {
