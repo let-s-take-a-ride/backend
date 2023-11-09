@@ -13,7 +13,6 @@ class LoginView(APIView):
 
         decoded_url = urllib.parse.unquote(user.picture.url[7:]) if user.picture else None
         corrected_url = decoded_url.replace("https:/", "https://")
-        print(user.__dict__)
 
         if user.is_authenticated:
             unread_notifications = Notification.objects.filter(user=user, is_read=False).count()
