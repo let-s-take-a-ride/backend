@@ -32,27 +32,19 @@ class Dev(Configuration):
         'http://localhost:3000',
         "http://localhost:8000",
         'http://localhost:5173',
-        'https://nine-keys-bake.loca.lt',
-        'https://solid-adults-lose.loca.lt',
-        'https://dark-singers-suffer.loca.lt/',
-        'https://2ba0-2a02-a319-a18f-7a00-00-4d96.ngrok-free.app'
     ]
+
     SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
     INTERNAL_IPS = [
         '127.0.0.1',
         '192.168.0.100',
         'localhost',
-        'https://nine-keys-bake.loca.lt',
-        'https://dark-singers-suffer.loca.lt',
-        'https://2ba0-2a02-a319-a18f-7a00-00-4d96.ngrok-free.app'
+
     ]
 
     CORS_ALLOWED_ORIGINS = [
-        'https://solid-adults-lose.loca.lt',
         "http://localhost:8000",
-        'https://2ba0-2a02-a319-a18f-7a00-00-4d96.ngrok-free.app'
-
     ]
 
     INSTALLED_APPS = [
@@ -139,9 +131,15 @@ class Dev(Configuration):
     }
 
     # Celery
-    CELERY_BROKER_URL = 'redis://localhost:6379/0'
-    # CELERY_ACCEPT_CONTENT = ['json']
-    CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+    # CELERY_BROKER_URL = 'redis://localhost:6379/0'
+    # CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+    # Celery
+    CELERY_BROKER_URL = 'redis://redis:6379/0'
+    CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+
+    CELERY_BROKER_CONNECTION_RETRY = True
+    CELERY_BROKER_CONNECTION_MAX_RETRIES = 10
+
     CELERY_TIMEZONE = 'UTC'
     CELERY_TASK_SERIALIZER = 'json'
     CELERY_RESULT_SERIALIZER = 'json'

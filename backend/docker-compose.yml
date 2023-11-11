@@ -24,7 +24,7 @@ services:
 #  celery:
 #    build:
 #      context: .  # Ścieżka do katalogu, w którym znajduje się Dockerfile dla aplikacji Celery
-#    command: celery -A core worker --loglevel=info
+#    command: celery -A core worker - -loglevel=info
 #    depends_on:
 #      - redis
 #    environment:

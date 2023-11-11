@@ -1,0 +1,80 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:16.0
+    container_name: lets-backend
+    env_file:
+      - .dev_env # Or the path to your env file
+#    environment:
+#      POSTGRES_DB: "${POSTGRES_DB}"
+#      POSTGRES_USER: "${POSTGRES_USER}"
+#      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    ports:
+      - "5438:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  redis:
+    image: redis:5
+    command: redis-server --save 60 1 --loglevel warning
+    sysctls:
+      - net.core.somaxconn=1024
+    ports:
+      - "6378:6379"
+    restart: always
+
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .dev_env
+#    command: daphne -p 8000 backend.asgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/app
+      - static_volume:/app/static
+      - media_volume:/app/media
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - DJANGO_SETTINGS_MODULE=backend.settings
+    restart: always
+
+  celery:
+    build: .
+#    command: celery -A core worker --loglevel=info
+    command: celery -A core worker --loglevel=info
+    depends_on:
+      - redis
+      - web
+    volumes:
+      - .:/app
+    environment:
+      - DJANGO_SETTINGS_MODULE=backend.settings
+    restart: always
+
+  celerybeat:
+    build: .
+#    command: celery -A core beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    command: celery -A core beat -l info
+    depends_on:
+      - redis
+      - web
+    volumes:
+      - .:/app
+      - celerybeat_data:/var/lib/celery/beat
+    environment:
+      - DJANGO_SETTINGS_MODULE=backend.settings
+    restart: always
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
+  celerybeat_data:

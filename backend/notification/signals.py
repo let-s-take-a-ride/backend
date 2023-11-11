@@ -9,5 +9,5 @@ def send_notification(sender, instance, created, **kwargs):
         user_id = instance.user.id
         message = instance.message
         print(user_id)
-        print(message)
+        print(message + "TWORZYMY WLASNIE NOTIFICATION")
         send_notification_to_user(user_id, message)
