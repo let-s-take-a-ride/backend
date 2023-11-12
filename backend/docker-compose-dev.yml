@@ -11,7 +11,8 @@ services:
 #      POSTGRES_USER: "${POSTGRES_USER}"
 #      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
     ports:
-      - "5438:5432"
+      - "5432:5432"
+#      - "5438:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: always
@@ -24,7 +25,8 @@ services:
     sysctls:
       - net.core.somaxconn=1024
     ports:
-      - "6378:6379"
+#      - "6378:6379"
+      - "6379:6379"
     restart: always
     networks:
       - djangonetwork

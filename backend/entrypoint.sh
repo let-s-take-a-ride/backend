@@ -15,10 +15,10 @@ export POSTGRES_PASSWORD="${POSTGRES_PASSWORD}"
 echo "DATABASE_URL: $DATABASE_URL"
 
 
-echo "Waiting for PostgreSQL..."
-while ! nc -z $POSTGRES_HOST $POSTGRES_PORT; do
-  sleep 2.5
-done
+#echo "Waiting for PostgreSQL..."
+#while ! nc -z $DATABASE_URL; do
+#  sleep 2.5
+#done
 echo "PostgreSQL started"
 
 # Apply database migrations
