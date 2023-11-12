@@ -14,5 +14,24 @@ services:
       - postgres_data:/var/lib/postgresql/data
     restart: always
 
+  redis:
+    image: redis:5
+    ports:
+      - "6379:6379"
+    restart: always
+
+
+#  celery:
+#    build:
+#      context: .  # Ścieżka do katalogu, w którym znajduje się Dockerfile dla aplikacji Celery
+#    command: celery -A core worker - -loglevel=info
+#    depends_on:
+#      - redis
+#    environment:
+#      - DJANGO_SETTINGS_MODULE=backend.settings
+#    volumes:
+#      - ./backend:/app  # Ścieżka do katalogu, w którym znajduje się aplikacja Celery
+#    network_mode: host
+
 volumes:
   postgres_data:

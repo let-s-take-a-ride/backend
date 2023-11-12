@@ -7,12 +7,14 @@ from rest_framework.routers import DefaultRouter
 
 from user.views import CustomUserViewSet, update_preferences
 from workout.views import EventViewSet, EventMembershipViewSet
+from notification.views import NotificationViewSet
 
 
 router = DefaultRouter()
 router.register(r'users', CustomUserViewSet)
 router.register(r'events', EventViewSet)
 router.register(r'memberships', EventMembershipViewSet)
+router.register(r'notifications', NotificationViewSet)
 
 schema_view = get_schema_view(
     openapi.Info(

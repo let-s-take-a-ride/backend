@@ -4,15 +4,10 @@ from configurations import Configuration, values
 from dotenv import load_dotenv
 import dj_database_url
 
-
-
 import json
 from six.moves.urllib import request
 from cryptography.x509 import load_pem_x509_certificate
 from cryptography.hazmat.backends import default_backend
-
-
-
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,12 +16,12 @@ print(BASE_DIR)
 
 class Dev(Configuration):
 
+
     SECRET_KEY = values.SecretValue()
     DEBUG = values.BooleanValue(True)
     AUTH0_DOMAIN = os.getenv('DJANGO_AUTH0_DOMAIN')
     AUTH0_AUDIENCE = os.getenv('DJANGO_AUTH0_AUDIENCE')
     AUTH0_ALGORITHMS = ['RS256']
-
 
     ALLOWED_HOSTS = ['*']
     CORS_ORIGIN_ALLOW_ALL = True
@@ -35,26 +30,29 @@ class Dev(Configuration):
 
     CSRF_TRUSTED_ORIGINS = [
         'http://localhost:3000',
+        "http://localhost:8000",
         'http://localhost:5173',
-        'https://nine-keys-bake.loca.lt',
-        'https://solid-adults-lose.loca.lt',
-        'https://dark-singers-suffer.loca.lt/'
+        'https://ashy-ocean-0becf2e03.4.azurestaticapps.net'
     ]
+
     SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
     INTERNAL_IPS = [
         '127.0.0.1',
         '192.168.0.100',
         'localhost',
-        'https://nine-keys-bake.loca.lt',
-        'https://dark-singers-suffer.loca.lt/'
+        'https://ashy-ocean-0becf2e03.4.azurestaticapps.net',
+
     ]
 
     CORS_ALLOWED_ORIGINS = [
-        'https://solid-adults-lose.loca.lt'
+        "http://localhost:8000",
+        "0.0.0.0:8000",
+        "https://ashy-ocean-0becf2e03.4.azurestaticapps.net"
     ]
 
     INSTALLED_APPS = [
+        'daphne',
         'django.contrib.admin',
         'django.contrib.auth',
         'django.contrib.contenttypes',
@@ -72,12 +70,17 @@ class Dev(Configuration):
         'rest_framework_jwt',
         'rest_framework_simplejwt',
         'django_filters',
+        'channels',
+        'django_celery_results',
+        'django_celery_beat',
+        'celery',
 
         # app modules
         'core.apps.CoreConfig',
         'user.apps.UserConfig',
         'auth0authorization.apps.Auth0AuthorizationConfig',
         'workout.apps.WorkoutConfig',
+        'notification.apps.NotificationConfig',
 
         # health check
         'health_check',
@@ -90,6 +93,15 @@ class Dev(Configuration):
 
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [("redis", 6379)],
+            },
+        },
+    }
 
     MIDDLEWARE = [
         'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -122,6 +134,28 @@ class Dev(Configuration):
         },
     }
 
+    # Celery
+    # CELERY_BROKER_URL = 'redis://localhost:6379/0'
+    # CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+    # Celery
+    CELERY_BROKER_URL = 'redis://redis:6379/0'
+    CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+
+    CELERY_BROKER_CONNECTION_RETRY = True
+    CELERY_BROKER_CONNECTION_MAX_RETRIES = 10
+
+    CELERY_TIMEZONE = 'UTC'
+    CELERY_TASK_SERIALIZER = 'json'
+    CELERY_RESULT_SERIALIZER = 'json'
+    CELERY_TASK_TRACK_STARTED = True
+    CELERY_TASK_TIME_LIMIT = 30 * 60
+    CELERYD_LOG_LEVEL = "INFO"  # or "DEBUG"
+
+    # CELERY_RESULT_BACKEND = 'django-db'
+    CELERY_CACHE_BACKEND = 'django-cache'
+
+    CELERY_IMPORTS = ('core.tasks',)
+
     AUTH_USER_MODEL = 'user.CustomUser'
 
     ROOT_URLCONF = 'backend.urls'
@@ -143,6 +177,8 @@ class Dev(Configuration):
     ]
 
     WSGI_APPLICATION = 'backend.wsgi.application'
+    ASGI_APPLICATION = 'backend.asgi.application'
+    # ASGI_APPLICATION = 'routing.application'
 
     DATABASES = {
         'default': dj_database_url.config(),
@@ -183,4 +219,3 @@ class Dev(Configuration):
 
 class Prod(Dev):
     DEBUG = values.BooleanValue(False)
-
