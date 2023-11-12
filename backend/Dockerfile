@@ -14,7 +14,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Install dependencies
-COPY requirements.cfg /app/
+COPY backend/requirements.cfg /app/
 RUN pip install --no-cache-dir -r requirements.cfg
 
 # Copy project
