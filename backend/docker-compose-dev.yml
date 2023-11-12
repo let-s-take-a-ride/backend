@@ -16,10 +16,6 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: always
-    networks:
-      - djangonetwork
-    options: --name postgres
-
 
   redis:
     image: redis:5
@@ -30,8 +26,6 @@ services:
 #      - "6378:6379"
       - "6379:6379"
     restart: always
-    networks:
-      - djangonetwork
 
 
   web:
@@ -50,8 +44,6 @@ services:
     depends_on:
       - postgres
       - redis
-    networks:
-      - djangonetwork
     environment:
       - DJANGO_SETTINGS_MODULE=backend.settings
     restart: always
@@ -65,8 +57,6 @@ services:
       - web
     volumes:
       - .:/app
-    networks:
-      - djangonetwork
     environment:
       - DJANGO_SETTINGS_MODULE=backend.settings
     restart: always
@@ -84,8 +74,8 @@ services:
     environment:
       - DJANGO_SETTINGS_MODULE=backend.settings
     restart: always
-    networks:
-      - djangonetwork
+#    networks:
+#      - djangonetwork
 
 volumes:
   postgres_data:
@@ -93,6 +83,6 @@ volumes:
   media_volume:
   celerybeat_data:
 
-networks:
-  djangonetwork:
-    driver: bridge
+#networks:
+#  djangonetwork:
+#    driver: bridge
