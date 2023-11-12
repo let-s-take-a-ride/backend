@@ -14,7 +14,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Install dependencies
-COPY requirements.cfg /app/
+COPY backend/requirements.cfg /app/
 RUN pip install --no-cache-dir -r requirements.cfg
 
 # Copy project
@@ -30,7 +30,7 @@ COPY . /app/
 EXPOSE 8000
 
 # Make sure the entrypoint.sh script is executable
-COPY entrypoint.sh /app/
+COPY backend/entrypoint.sh /app/
 RUN chmod +x /app/entrypoint.sh
 
 # Run the entrypoint script
