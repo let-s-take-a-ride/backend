@@ -28,8 +28,6 @@ COPY . /app/
 
 # Expose port 8000 to the outside world
 EXPOSE 8000
-EXPOSE 6379
-EXPOSE 5432
 
 # Make sure the entrypoint.sh script is executable
 COPY backend/entrypoint.sh /app/
