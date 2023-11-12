@@ -31,7 +31,7 @@ jobs:
       with:
         push: true
         tags: letsbackend.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_329b88fbdbe846b59ecff8b610134b95 }}/backend_web:${{ github.sha }}
-        file: ./Dockerfile
+        file: ./backend/Dockerfile
 
   deploy:
     runs-on: ubuntu-latest
