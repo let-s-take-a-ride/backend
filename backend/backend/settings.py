@@ -32,6 +32,7 @@ class Dev(Configuration):
         'http://localhost:3000',
         "http://localhost:8000",
         'http://localhost:5173',
+        'https://ashy-ocean-0becf2e03.4.azurestaticapps.net'
     ]
 
     SECURE_CROSS_ORIGIN_OPENER_POLICY = None
@@ -40,11 +41,14 @@ class Dev(Configuration):
         '127.0.0.1',
         '192.168.0.100',
         'localhost',
+        'https://ashy-ocean-0becf2e03.4.azurestaticapps.net',
 
     ]
 
     CORS_ALLOWED_ORIGINS = [
         "http://localhost:8000",
+        "0.0.0.0:8000",
+        "https://ashy-ocean-0becf2e03.4.azurestaticapps.net"
     ]
 
     INSTALLED_APPS = [
@@ -94,7 +98,7 @@ class Dev(Configuration):
         "default": {
             "BACKEND": "channels_redis.core.RedisChannelLayer",
             "CONFIG": {
-                "hosts": [("localhost", 6379)],
+                "hosts": [("redis", 6379)],
             },
         },
     }

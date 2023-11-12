@@ -1,15 +1,3 @@
-# FROM python:3.10.12
-#
-# # Set environment variables
-# ENV POSTGRES_DB lets_take_a_ride
-# ENV POSTGRES_USER rider
-# ENV POSTGRES_PASSWORD ss5Secure!
-# ENV DJANGO_SECRET_KEY=django-insecure-7&p7fb+_*u%r)d4$ohzjd02q0lw-+o8d6r+6f-pu5@zjv#9dy$
-# ENV DJANGO_TIME_ZONE=UTC
-# ENV DATABASE_URL=postgres://rider:ss5Secure!@localhost:5438/lets_take_a_ride
-# ENV DJANGO_AUTH0_DOMAIN=dev-1w8bd2btom2xomge.eu.auth0.com
-# ENV DJANGO_AUTH0_AUDIENCE=https://dev-1w8bd2btom2xomge.eu.auth0.com/api/v2/
-
 FROM python:3.10.12
 
 # Set work directory
