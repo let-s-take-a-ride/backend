@@ -3,7 +3,7 @@ version: '3'
 services:
   postgres:
     image: postgres:16.0
-    container_name: lets-backend
+    container_name: postgres
     env_file:
       - .dev_env # Or the path to your env file
 #    environment:
