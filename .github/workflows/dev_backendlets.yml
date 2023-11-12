@@ -30,7 +30,8 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: letsbackend.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_329b88fbdbe846b59ecff8b610134b95 }}/backend_web:${{ github.sha }}
+        # tags: letsbackend.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_329b88fbdbe846b59ecff8b610134b95 }}/backend_web:${{ github.sha }}
+        tags: 'letsbackend.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_329b88fbdbe846b59ecff8b610134b95 }}/backend_web:latest'
         file: ./backend/Dockerfile
 
   deploy:
@@ -48,4 +49,5 @@ jobs:
         app-name: 'backendlets'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_4357897d783549a5b591aae3929c921c }}
-        images: 'letsbackend.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_329b88fbdbe846b59ecff8b610134b95 }}/backend_web:${{ github.sha }}'
+        # images: 'letsbackend.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_329b88fbdbe846b59ecff8b610134b95 }}/backend_web:${{ github.sha }}'
+        images: 'letsbackend.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_329b88fbdbe846b59ecff8b610134b95 }}/backend_web:latest'
