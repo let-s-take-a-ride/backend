@@ -18,6 +18,8 @@ services:
     restart: always
     networks:
       - djangonetwork
+    options: --name postgres
+
 
   redis:
     image: redis:5
