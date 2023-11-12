@@ -47,7 +47,8 @@ class Dev(Configuration):
 
     CORS_ALLOWED_ORIGINS = [
         "http://localhost:8000",
-        "0.0.0.0:8000",
+        "http://0.0.0.0:8000",
+        "https://0.0.0.0:8000",
         "https://ashy-ocean-0becf2e03.4.azurestaticapps.net"
     ]
 
