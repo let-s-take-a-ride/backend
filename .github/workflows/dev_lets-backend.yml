@@ -28,7 +28,7 @@ jobs:
       with:
         push: true
         tags: letsbackend.azurecr.io/backend_web:latest
-        file: ./Dockerfile
+        file: ./backend/Dockerfile
 
   deploy:
     runs-on: ubuntu-latest
