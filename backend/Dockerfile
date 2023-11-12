@@ -30,7 +30,7 @@ COPY . /app/
 EXPOSE 8000
 
 # Make sure the entrypoint.sh script is executable
-COPY entrypoint.sh /app/
+COPY backend/entrypoint.sh /app/
 RUN chmod +x /app/entrypoint.sh
 
 # Run the entrypoint script
