@@ -23,7 +23,7 @@ echo "PostgreSQL started"
 
 # Apply database migrations
 echo "Applying database migrations..."
-python manage.py migrate
+python backend/manage.py migrate
 
 # Collect static files
 #echo "Collecting static files..."
