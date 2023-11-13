@@ -6,73 +6,58 @@ services:
     container_name: postgres
     env_file:
       - .dev_env # Or the path to your env file
-#    environment:
-#      POSTGRES_DB: "${POSTGRES_DB}"
-#      POSTGRES_USER: "${POSTGRES_USER}"
-#      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 10s
       timeout: 5s
       retries: 3
-#    ports:
-#      - "5432:5432"
-#      - "5438:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: always
-    # networks:
-    #   - internal_network
 
   redis:
     image: redis:5
     command: redis-server --save 60 1 --loglevel warning
     sysctls:
       - net.core.somaxconn=1024
-#    ports:
-#      - "6378:6379"
-#      - "6379:6379"
     restart: always
-    # networks:
-    #   - internal_network
 
 
-  web:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    env_file:
-      - .dev_env
-#    command: daphne -p 8000 backend.asgi:application --bind 0.0.0.0:8000
-    volumes:
-      - .:/app
-      - static_volume:/app/static
-      - media_volume:/app/media
-    ports:
-      - "8000:8000"
-    depends_on:
-      - postgres
-      - redis
-    environment:
-      - DJANGO_SETTINGS_MODULE=backend.settings
-    restart: always
-    # networks:
-    #   - internal_network
+
+#   web:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     env_file:
+#       - .dev_env
+# #    command: daphne -p 8000 backend.asgi:application --bind 0.0.0.0:8000
+#     volumes:
+#       - .:/app
+#       - static_volume:/app/static
+#       - media_volume:/app/media
+#     ports:
+#       - "8000:8000"
+#     depends_on:
+#       - postgres
+#       - redis
+#     environment:
+#       - DJANGO_SETTINGS_MODULE=backend.settings
+#     restart: always
+#     # networks:
+#     #   - internal_network
 
   celery:
     build: .
-#    command: celery -A core worker --loglevel=info
     command: celery -A core worker --loglevel=info
     depends_on:
       - redis
-      - web
+      # - web
     volumes:
       - .:/app
     environment:
       - DJANGO_SETTINGS_MODULE=backend.settings
     restart: always
-    # networks:
-    #   - internal_network
 
   celerybeat:
     build: .
@@ -80,17 +65,14 @@ services:
     command: celery -A core beat -l info
     depends_on:
       - redis
-      - web
+      # - web
     volumes:
       - .:/app
       - celerybeat_data:/var/lib/celery/beat
     environment:
       - DJANGO_SETTINGS_MODULE=backend.settings
     restart: always
-    # networks:
-    #   - internal_network
-#    networks:
-#      - djangonetwork
+
 
 volumes:
   postgres_data:
@@ -98,8 +80,5 @@ volumes:
   media_volume:
   celerybeat_data:
 
-# networks:
-#   internal_network:
-#     driver: bridge
 
 
