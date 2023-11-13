@@ -34,5 +34,5 @@ echo "Starting server..."
 # Start Daphne
 #exec daphne -p 8000 backend.asgi:application
 # exec daphne -p 8000 backend.asgi:application --bind 0.0.0.0
-exec daphne backend.asgi:application --bind 0.0.0.0:8000
+exec daphne backend.asgi:application --bind 0.0.0.0
 

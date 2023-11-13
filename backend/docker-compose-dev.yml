@@ -15,8 +15,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-    ports:
-      - "5432:5432"
+#    ports:
+#      - "5432:5432"
 #      - "5438:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -29,9 +29,9 @@ services:
     command: redis-server --save 60 1 --loglevel warning
     sysctls:
       - net.core.somaxconn=1024
-    ports:
+#    ports:
 #      - "6378:6379"
-      - "6379:6379"
+#      - "6379:6379"
     restart: always
     # networks:
     #   - internal_network
