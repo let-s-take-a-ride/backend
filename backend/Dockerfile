@@ -19,7 +19,6 @@ RUN pip install --no-cache-dir -r requirements.cfg
 
 # Copy project
 COPY . /app/
-
 # Collect static files
 # RUN python manage.py collectstatic --noinput
 
