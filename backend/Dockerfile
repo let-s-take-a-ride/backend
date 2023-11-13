@@ -27,7 +27,7 @@ COPY . /app/
 # RUN python manage.py migrate
 
 # Expose port 8000 to the outside world
-EXPOSE 8000
+EXPOSE 8000/tcp
 
 # Make sure the entrypoint.sh script is executable
 COPY backend/entrypoint.sh /app/
