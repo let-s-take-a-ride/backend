@@ -17,7 +17,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     restart: always
     networks:
-      - default
+      - internal_network
 
   redis:
     image: redis:5
@@ -29,7 +29,7 @@ services:
       - "6379:6379"
     restart: always
     networks:
-      - default
+      - internal_network
 
 
   web:
@@ -52,7 +52,7 @@ services:
       - DJANGO_SETTINGS_MODULE=backend.settings
     restart: always
     networks:
-      - default
+      - internal_network
 
   celery:
     build: .
@@ -67,7 +67,7 @@ services:
       - DJANGO_SETTINGS_MODULE=backend.settings
     restart: always
     networks:
-      - default
+      - internal_network
 
   celerybeat:
     build: .
@@ -83,7 +83,7 @@ services:
       - DJANGO_SETTINGS_MODULE=backend.settings
     restart: always
     networks:
-      - default
+      - internal_network
 #    networks:
 #      - djangonetwork
 
@@ -93,6 +93,8 @@ volumes:
   media_volume:
   celerybeat_data:
 
-#networks:
-#  djangonetwork:
-#    driver: bridge
+networks:
+  internal_network:
+    driver: bridge
+
+
