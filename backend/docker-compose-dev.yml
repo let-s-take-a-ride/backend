@@ -7,11 +7,11 @@ services:
     env_file:
       - .dev_env # Or the path to your env file
 
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
+    # healthcheck:
+    #   test: ["CMD-SHELL", "pg_isready"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 3
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: always
@@ -26,15 +26,14 @@ services:
 
 
   web:
-    # build:
-    #   context: .
-    #   dockerfile: Dockerfile
-    image: backend_lets/backend_web:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # image: backend_lets/backend_web:latest
     env_file:
       - .dev_env
 #    command: daphne -p 8000 backend.asgi:application --bind 0.0.0.0:8000
     volumes:
-      - .:/app
       - static_volume:/app/static
       - media_volume:/app/media
     ports:
@@ -53,9 +52,8 @@ services:
     command: celery -A core worker --loglevel=info
     depends_on:
       - redis
-      # - web
+      - web
     volumes:
-      - .:/app
     environment:
       - DJANGO_SETTINGS_MODULE=backend.settings
     restart: always
@@ -66,9 +64,8 @@ services:
     command: celery -A core beat -l info
     depends_on:
       - redis
-      # - web
+      - web
     volumes:
-      - .:/app
       - celerybeat_data:/var/lib/celery/beat
     environment:
       - DJANGO_SETTINGS_MODULE=backend.settings
