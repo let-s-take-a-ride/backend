@@ -7,7 +7,6 @@ WORKDIR /app
 # RUN apt-get update && apt-get install -y netcat-openbsd && rm -rf /var/lib/apt/lists/*
 
 # Install system dependencies
-# --no-install-recommends
 RUN apt-get update && \
     apt-get install -y apt-utils && \
     apt-get install -y netcat-openbsd && \
